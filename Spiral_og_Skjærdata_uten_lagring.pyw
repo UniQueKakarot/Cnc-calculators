@@ -235,7 +235,7 @@ class Application(tk.Frame):
 
 app = SampleApp()
 app.title("Skjærdata Kalkulator")
-#app.resizable(width=False, height=False)
+app.resizable(width=False, height=False)
 
 
 
