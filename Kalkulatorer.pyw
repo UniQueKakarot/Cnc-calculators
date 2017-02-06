@@ -11,8 +11,25 @@ win.title("Maskinerings kalkulatorer")
 win.geometry("350x280")
 win.iconbitmap(r'Test.ico')
 
+#add a menu bar
+#menuBar = Menu(win)
+#win.config(menu = menuBar)
+
+#fileMenu = Menu(menuBar)
+#fileMenu.add_command(label="New")
+#menuBar.add_cascade(label="File", menu=fileMenu)
+
+#optionsMenu = Menu(menuBar)
+#optionsMenu.add_command(label="Secret")
+#menuBar.add_cascade(label="Options", menu=optionsMenu)
+
+
+#aboutMenu = Menu(menuBar)
+#aboutMenu.add_command(label="About")
+#menuBar.add_cascade(label="About", menu=aboutMenu)
+
 #Font controll
-FONT1 = ("Verdana", 11)
+FONT1 = ("Verdana", 10)
 
 tabControl = ttk.Notebook(win)
 
@@ -84,44 +101,49 @@ class Tab1():
 
         """Doing all the maths"""
 
-        # calculation for cutting meter
-        pi = float(3.14)
+        try:
+            # calculation for cutting meter
+            pi = float(3.14)
 
-        x = int(1000)
+            x = int(1000)
 
-        v = self.cutting_meter.get()
-        v = int(v)
+            v = self.cutting_meter.get()
+            v = int(v)
 
-        d = self.dia.get()
-        d = d.replace(',' , '.')
-        d = float(d)
 
-        self.spindel_speed = (float(v) * x) / (pi * float(d))
+            d = self.dia.get()
+            d = d.replace(',' , '.')
+            d = float(d)
 
-        #calculation for feed per tooth
-        f = self.feed_tooth.get()
-        f = f.replace(',' , '.')
-        f = float(f)
+            self.spindel_speed = (float(v) * x) / (pi * float(d))
 
-        t = self.teeth.get()
-        t = int(t)
+            #calculation for feed per tooth
+            f = self.feed_tooth.get()
+            f = f.replace(',' , '.')
+            f = float(f)
 
-        s = self.spindel_speed
-        s = int(s)
+            t = self.teeth.get()
+            t = int(t)
 
-        self.feed_per_tooth = f * t * s
+            s = self.spindel_speed
+            s = int(s)
 
-        spindel = self.spindel_speed
-        feed = self.feed_per_tooth
+            self.feed_per_tooth = f * t * s
 
-        spindel = int(spindel)
-        feed = int(feed)
+            spindel = self.spindel_speed
+            feed = self.feed_per_tooth
 
-        self.result.delete(0.0, END)
-        self.result.insert(0.0, spindel)
+            spindel = int(spindel)
+            feed = int(feed)
 
-        self.result1.delete(0.0, END)
-        self.result1.insert(0.0, feed)
+            self.result.delete(0.0, END)
+            self.result.insert(0.0, spindel)
+
+            self.result1.delete(0.0, END)
+            self.result1.insert(0.0, feed)
+
+        except(ValueError):
+            pass
 
 
 
@@ -166,32 +188,37 @@ class Tab2():
     def DOIT(self):
         """Calculate the angle of your spiral"""
 
-        dia_fres = self.dia_mill.get()
-        dia_fres = dia_fres.replace(',' , '.')
-        dia_fres = float(dia_fres)
+        try:
 
-        dia_hull = self.dia_hole.get()
-        dia_hull = dia_hull.replace(',' , '.')
-        dia_hull = float(dia_hull)
+            dia_fres = self.dia_mill.get()
+            dia_fres = dia_fres.replace(',' , '.')
+            dia_fres = float(dia_fres)
 
-        z_step = self.step_pitch.get()
-        z_step = z_step.replace(',' , '.')
-        z_step = float(z_step)
+            dia_hull = self.dia_hole.get()
+            dia_hull = dia_hull.replace(',' , '.')
+            dia_hull = float(dia_hull)
 
-        omkrets = (dia_hull - dia_fres) * 3.14
+            z_step = self.step_pitch.get()
+            z_step = z_step.replace(',' , '.')
+            z_step = float(z_step)
 
-        #print(omkrets)
+            omkrets = (dia_hull - dia_fres) * 3.14
 
-        vinkel = (sin(1.57079633) * z_step) / omkrets
+            #print(omkrets)
 
-        #print(vinkel)
+            vinkel = (sin(1.57079633) * z_step) / omkrets
 
-        vinkel = degrees(vinkel)
+            #print(vinkel)
 
-        #print(vinkel)
+            vinkel = degrees(vinkel)
 
-        self.angle.delete(0.0, END)
-        self.angle.insert(0.0, vinkel)
+            #print(vinkel)
+
+            self.angle.delete(0.0, END)
+            self.angle.insert(0.0, vinkel)
+
+        except(ValueError):
+            pass
 
 
 class Tab3():
@@ -257,44 +284,54 @@ class Tab3():
     def JUSTDOIT_INSIDE(self):
         """Calculations for periferi feed inside circular ramping"""
 
-        Vfm = self.Vfm.get()
-        Vfm = int(Vfm)
+        try:
 
-        Dm = self.Dm.get()
-        Dm = Dm.replace(',' , '.')
-        Dm = float(Dm)
+            Vfm = self.Vfm.get()
+            Vfm = int(Vfm)
 
-        Dcap = self.Dcap.get()
-        Dcap = Dcap.replace(',' , '.')
-        Dcap = float(Dcap)
+            Dm = self.Dm.get()
+            Dm = Dm.replace(',' , '.')
+            Dm = float(Dm)
 
-        Vf = (Vfm * (Dm + Dcap)) / Dm
-        Vf = int(Vf)
+            Dcap = self.Dcap.get()
+            Dcap = Dcap.replace(',' , '.')
+            Dcap = float(Dcap)
 
-        self.perif.delete(0.0, END)
-        self.perif.insert(0.0, Vf)
+            Vf = (Vfm * (Dm + Dcap)) / Dm
+            Vf = int(Vf)
+
+            self.perif.delete(0.0, END)
+            self.perif.insert(0.0, Vf)
+
+        except(ValueError):
+            pass
 
 
 
     def JUSTDOIT_OUTSIDE(self):
         """Calculations for periferi feed outside circular ramping"""
 
-        Vfm = self.Vfm.get()
-        Vfm = int(Vfm)
+        try:
 
-        Dm = self.Dm.get()
-        Dm = Dm.replace(',' , '.')
-        Dm = float(Dm)
+            Vfm = self.Vfm.get()
+            Vfm = int(Vfm)
 
-        Dcap = self.Dcap.get()
-        Dcap = Dcap.replace(',' , '.')
-        Dcap = float(Dcap)
+            Dm = self.Dm.get()
+            Dm = Dm.replace(',' , '.')
+            Dm = float(Dm)
 
-        Vf = (Vfm * (Dm - Dcap)) / Dm
-        Vf = int(Vf)
+            Dcap = self.Dcap.get()
+            Dcap = Dcap.replace(',' , '.')
+            Dcap = float(Dcap)
 
-        self.perif.delete(0.0, END)
-        self.perif.insert(0.0, Vf)
+            Vf = (Vfm * (Dm - Dcap)) / Dm
+            Vf = int(Vf)
+
+            self.perif.delete(0.0, END)
+            self.perif.insert(0.0, Vf)
+
+        except(ValueError):
+            pass
 
 
 
