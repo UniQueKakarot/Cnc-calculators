@@ -8,32 +8,16 @@ win = tk.Tk()
 
 # Add a title
 win.title("Maskinerings kalkulatorer")
-win.geometry("350x280")
-win.iconbitmap(r'Test.ico')
+win.geometry("400x280")
+#win.iconbitmap(r'Test.ico')
 
-#add a menu bar
-#menuBar = Menu(win)
-#win.config(menu = menuBar)
-
-#fileMenu = Menu(menuBar)
-#fileMenu.add_command(label="New")
-#menuBar.add_cascade(label="File", menu=fileMenu)
-
-#optionsMenu = Menu(menuBar)
-#optionsMenu.add_command(label="Secret")
-#menuBar.add_cascade(label="Options", menu=optionsMenu)
-
-
-#aboutMenu = Menu(menuBar)
-#aboutMenu.add_command(label="About")
-#menuBar.add_cascade(label="About", menu=aboutMenu)
 
 #Font controll
 FONT1 = ("Verdana", 10)
 
 tabControl = ttk.Notebook(win)
 
-class Tab1():
+class Tab1(): #Skjærdata kalkulator for fresing
 
     def __init__(self):
 
@@ -136,11 +120,15 @@ class Tab1():
             spindel = int(spindel)
             feed = int(feed)
 
+            self.result.config(state=NORMAL)
             self.result.delete(0.0, END)
             self.result.insert(0.0, spindel)
+            self.result.config(state=DISABLED)
 
+            self.result1.config(state=NORMAL)
             self.result1.delete(0.0, END)
             self.result1.insert(0.0, feed)
+            self.result1.config(state=DISABLED)
 
         except(ValueError):
             pass
@@ -148,7 +136,7 @@ class Tab1():
 
 
 
-class Tab2():
+class Tab2(): #Grad av sprial kalkulator
 
     def __init__(self):
 
@@ -214,14 +202,16 @@ class Tab2():
 
             #print(vinkel)
 
+            self.angle.config(state=NORMAL)
             self.angle.delete(0.0, END)
             self.angle.insert(0.0, vinkel)
+            self.angle.config(state=DISABLED)
 
         except(ValueError):
             pass
 
 
-class Tab3():
+class Tab3(): #Periferimating kalkulator
 
     def __init__(self):
 
@@ -241,21 +231,23 @@ class Tab3():
         self.Vfm = ttk.Entry(self.peri)
         self.Vfm.grid(row = 1, column = 1, sticky = W)
 
-        Label(self.peri, text="Diameter på Hull:", font=FONT1).grid(row=2, column=0, sticky=W)
-        self.Dm = ttk.Entry(self.peri)
-        self.Dm.grid(row = 2, column = 1, sticky = W)
-
-        Label(self.peri, text="Diameter på Fres:", font=FONT1).grid(row=3, column=0, sticky=W)
+        Label(self.peri, text="Diameter på Fres:", font=FONT1).grid(row=2, column=0, sticky=W)
         self.Dcap = ttk.Entry(self.peri)
-        self.Dcap.grid(row = 3, column = 1, sticky = W)
+        self.Dcap.grid(row = 2, column = 1, sticky = W)
+
+        Label(self.peri, text="Diameter på Hull:", font=FONT1).grid(row=3, column=0, sticky=W)
+        self.Dm = ttk.Entry(self.peri)
+        self.Dm.grid(row = 3, column = 1, sticky = W)
 
         self.radVar = IntVar()
 
-        self.rad1 = ttk.Radiobutton(self.peri, text="Innvendig", variable=self.radVar, value=1, command=self.radCall)
+        self.rad1 = ttk.Radiobutton(self.peri, text="MM/Min Yttre Skjærkant", variable=self.radVar, value=1, command=self.radCall)
         self.rad1.grid(column=0, row=4, sticky=W)
 
-        self.rad2 = ttk.Radiobutton(self.peri, text="Utvendig", variable=self.radVar, value=2, command=self.radCall)
+        self.rad2 = ttk.Radiobutton(self.peri, text="MM/Min Indre Skjærkant", variable=self.radVar, value=2, command=self.radCall)
         self.rad2.grid(column=1, row=4, sticky=W)
+
+        self.radVar.set(1)
 
 
     def radCall(self):
@@ -267,7 +259,7 @@ class Tab3():
             self.calculate = ttk.Button(self.peri, text = "Kalkuler!", command = self.JUSTDOIT_INSIDE)
             self.calculate.grid(row = 5, column = 1, columnspan = 2, sticky=N, pady=10)
 
-            Label(self.peri, text = "Periferimating Innvendig:", font=FONT1).grid(row = 6, column = 0, sticky=N)
+            Label(self.peri, text = "Periferimating Yttre Skjærkant:", font=FONT1).grid(row = 6, column = 0, sticky=N)
             self.perif = tk.Text(self.peri, width = 5, height = 1)
             self.perif.grid(row = 6, column = 1, columnspan = 2, sticky=W)
 
@@ -275,7 +267,7 @@ class Tab3():
             self.calculate = ttk.Button(self.peri, text = "Kalkuler!", command = self.JUSTDOIT_OUTSIDE)
             self.calculate.grid(row = 5, column = 1, columnspan = 2, sticky=N, pady=10)
 
-            Label(self.peri, text = "Periferimating Utvendig:", font=FONT1).grid(row = 6, column = 0, sticky=N)
+            Label(self.peri, text = "Periferimating Indre Skjærkant:", font=FONT1).grid(row = 6, column = 0, sticky=N)
             self.perif = tk.Text(self.peri, width = 5, height = 1)
             self.perif.grid(row = 6, column = 1, columnspan = 2, sticky=W)
 
@@ -300,8 +292,10 @@ class Tab3():
             Vf = (Vfm * (Dm + Dcap)) / Dm
             Vf = int(Vf)
 
+            self.perif.config(state=NORMAL)
             self.perif.delete(0.0, END)
             self.perif.insert(0.0, Vf)
+            self.perif.config(state=DISABLED)
 
         except(ValueError):
             pass
@@ -327,21 +321,271 @@ class Tab3():
             Vf = (Vfm * (Dm - Dcap)) / Dm
             Vf = int(Vf)
 
+            self.perif.config(state=NORMAL)
             self.perif.delete(0.0, END)
             self.perif.insert(0.0, Vf)
+            self.perif.config(state=DISABLED)
+
+        except(ValueError):
+            pass
+
+class Tab4(): #Kalk for borring
+
+    def __init__(self):
+
+        self.tab4 = ttk.Frame(tabControl)
+        tabControl.add(self.tab4, text='Boring')
+        tabControl.pack(expand=1, fill="both")
+
+        self.boring = ttk.LabelFrame(self.tab4, text="Skjærdatakalkulator for Boring")
+        self.boring.pack(expand=1)
+
+        self.structure()
+        self.radCall()
+
+    def structure(self):
+        """Skjærdata kalkulator"""
+
+        self.radVar = IntVar()
+
+
+        self.rad1 = ttk.Radiobutton(self.boring, text="MM/Min", variable=self.radVar, value=1, command=self.radCall)
+        self.rad1.grid(column=0, row=1, sticky=W)
+
+        self.rad2 = ttk.Radiobutton(self.boring, text="MM/Omdreiing", variable=self.radVar, value=2, command=self.radCall)
+        self.rad2.grid(column=1, row=1, sticky=W)
+
+
+        self.radVar.set(1)
+
+
+
+        # create label and entry for cutting meter
+        Label(self.boring, text = "Skjærhastighet:", font=FONT1).grid(row = 2, column = 0, sticky=W)
+
+        self.cutting_meter = ttk.Entry(self.boring)
+        self.cutting_meter.grid(row = 2, column = 1, sticky=N)
+
+        #Label(self.boring, text = "Mm/Min").grid(row = 2, column = 2, sticky=W)
+
+        # create label and entry for diameter on your mill
+        Label(self.boring, text = "Bor diameter:", font=FONT1).grid(row = 3, column = 0, sticky=W)
+
+        self.dia = ttk.Entry(self.boring)
+        self.dia.grid(row = 3, column = 1, sticky=N)
+
+    def radCall(self):
+        """Event handler for radiobuttons"""
+
+        radSel = self.radVar.get()
+
+        if   radSel == 1: #MM/Min
+
+            # create label and entry for feed per tooth
+            Label(self.boring, text = "Mating pr tann:      ", font=FONT1).grid(row = 4, column = 0, sticky=W)
+
+            self.feed_tooth = ttk.Entry(self.boring)
+            self.feed_tooth.grid(row = 4, column = 1, sticky=N)
+
+            #labels for the results
+            Label(self.boring, text = "Spindelhastighet:", font=FONT1).grid(row = 7, column = 0, sticky=W)
+            Label(self.boring, text = "Mating:                   ", font=FONT1).grid(row = 8, column = 0, sticky=W)
+
+            # Button for doing the calc
+            self.calculate = ttk.Button(self.boring, text = "Kalkuler!", command = self.calc1)
+            self.calculate.grid(row = 6, column = 1, columnspan = 2, sticky=N, pady=10)
+
+            # creating text box for displaying the result
+            self.result = Text(self.boring, width = 5, height = 1)
+            self.result.grid(row = 7, column = 1, columnspan = 2, sticky=N)
+
+            self.result1 = Text(self.boring, width = 5, height = 1)
+            self.result1.grid(row = 8, column = 1, columnspan = 2, sticky=N)
+
+        elif radSel == 2: #MM/Omdreiing
+
+            Label(self.boring, text="Mating MM/Min:", font=FONT1).grid(row=4, column=0, sticky=W)
+
+            self.feed_per_rev = ttk.Entry(self.boring)
+            self.feed_per_rev.grid(row = 4, column = 1, sticky=N)
+
+            #labels for the results
+            Label(self.boring, text = "Spindelhastighet:", font=FONT1).grid(row = 7, column = 0, sticky=W)
+            Label(self.boring, text = "Mating pr Omdreiing:", font=FONT1).grid(row = 8, column = 0, sticky=W)
+
+            # Button for doing the calc
+            self.calculate = ttk.Button(self.boring, text = "Kalkuler!", command = self.calc2)
+            self.calculate.grid(row = 6, column = 1, columnspan = 2, sticky=N, pady=10)
+
+            # creating text box for displaying the result
+            self.result = Text(self.boring, width = 5, height = 1)
+            self.result.grid(row = 7, column = 1, columnspan = 2, sticky=N)
+
+            self.result1 = Text(self.boring, width = 5, height = 1)
+            self.result1.grid(row = 8, column = 1, columnspan = 2, sticky=N)
+
+
+    def calc1(self): #MM/Min
+        "Doing all the maths here"
+
+        try:
+
+
+            #print("Welcome to funkytown")
+
+            #Skjærdatakalkulering
+            vc = self.cutting_meter.get() #Skjærmeter
+            vc = int(vc)
+
+            dc = self.dia.get() #Fres diameter
+            dc = dc.replace(',' , '.')
+            dc = float(dc)
+
+            pi = float(3.14)
+
+            n = (vc * 1000) / (pi * dc)
+            n = int(n) #Spindelhastighet
+
+            #Mating per tann kalkulering med mm/o
+            fn = self.feed_tooth.get()
+            fn = fn.replace(',' , '.')
+            fn = float(fn)
+
+
+            vf = fn * n
+            vf = int(vf)
+
+            self.result.config(state=NORMAL)
+            self.result.delete(0.0, END)
+            self.result.insert(0.0, n)
+            self.result.config(state=DISABLED)
+
+            self.result1.config(state=NORMAL)
+            self.result1.delete(0.0, END)
+            self.result1.insert(0.0, vf)
+            self.result1.config(state=DISABLED)
 
         except(ValueError):
             pass
 
 
 
+    def calc2(self): #MM/Omdreiing
+        "Doing all the maths here"
+
+        try:
+
+
+            #print("Welcome to funkytown")
+
+            #Skjærdatakalkulering
+            vc = self.cutting_meter.get() #Skjærmeter
+            vc = int(vc)
+
+            dc = self.dia.get() #Fres diameter
+            dc = dc.replace(',' , '.')
+            dc = float(dc)
+
+            pi = float(3.14)
+
+            n = (vc * 1000) / (pi * dc)
+            n = int(n) #Spindelhastighet
+
+            #Mating per tann kalkulering med mm/o
+            vf = float(self.feed_per_rev.get())
+
+
+            fn = vf / n
+            fn = float(fn)
+
+            self.result.config(state=NORMAL)
+            self.result.delete(0.0, END)
+            self.result.insert(0.0, n)
+            self.result.config(state=DISABLED)
+
+            self.result1.config(state=NORMAL)
+            self.result1.delete(0.0, END)
+            self.result1.insert(0.0, fn)
+            self.result1.config(state=DISABLED)
+
+        except(ValueError):
+            pass
+
+
+class Tab5(): #Ra kalkulator
+
+    def __init__(self):
+
+        self.tab5 = ttk.Frame(tabControl)
+        tabControl.add(self.tab5, text='RA')
+        tabControl.pack(expand=1, fill="both")
+
+        self.surface = ttk.LabelFrame(self.tab5, text="RA Kalkulator")
+        self.surface.pack(expand=1)#grid(row=0, column=0)
+
+        self.structure()
+
+    def structure(self):
+
+        Label(self.surface, text="MM/Omdreiing:", font=FONT1).grid(row=0, column=0, sticky=W)
+
+        self.feed_revolt = ttk.Entry(self.surface)
+        self.feed_revolt.grid(row=0, column=1, sticky=N)
+
+        self.nose = StringVar(win)
+
+        self.choices = [ '', '0.2', '0.4', '0.8', '1.2', '1.6', '2.4' ]
+
+        self.nose.set('0.2') #Standard verdi
+
+        Label(self.surface, text="Velg Neseradius:", font=FONT1).grid(row=1, column=0, sticky=W)
+
+        self.popupMenu = ttk.OptionMenu(self.surface, self.nose, *self.choices)
+        self.popupMenu.grid(row=1, column=1, sticky=N)
+
+        self.calculate = ttk.Button(self.surface, text = "Kalkuler!", command = self.calculations)
+        self.calculate.grid(row = 3, column = 1, columnspan = 2, sticky=N, pady=10)
+
+        Label(self.surface, text="Kalkulert RA:", font=FONT1).grid(row=5, column=0, sticky=W)
+
+        self.result = Text(self.surface, width = 5, height = 1)
+        self.result.grid(row = 5, column = 1, columnspan = 2, sticky=N)
+
+        #self.nose.trace('w', self.change_dropdown)
+
+    def calculations(self):
+        "Maths and stuffs"
+
+        try:
+
+
+            x = self.feed_revolt.get()
+            x = x.replace(',' , '.')
+            x = float(x)
+
+            r = self.nose.get()
+            r = float(r)
+
+            ra = ((x**2) / (r*24)) * 1000
+
+            self.result.config(state=NORMAL)
+            self.result.delete(0.0, END)
+            self.result.insert(0.0, ra)
+            self.result.config(state=DISABLED)
+
+            #print(ra)
+
+        except(ValueError):
+            pass
+
 
 
 #main
 
-test = Tab1()
-test2 = Tab2()
-test3 = Tab3()
-
+skjærdata = Tab1()
+spiral_kalk = Tab2()
+periferi_kalk = Tab3()
+boring_kalk = Tab4()
+ra_kalk = Tab5()
 
 win.mainloop()
