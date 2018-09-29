@@ -17,7 +17,7 @@ win.geometry("400x450")
 win.iconbitmap(r'Test.ico')
 
 
-#Font controll
+#Font control
 FONT1 = ("Verdana", 10)
 s = Style()
 s.configure('My.TFrame', background='grey')
